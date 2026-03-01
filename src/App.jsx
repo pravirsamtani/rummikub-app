@@ -1,10 +1,16 @@
+import { useState } from 'react';
 import { useGameState } from './game/useGameState.js';
 import Board from './components/Board.jsx';
 import Hand from './components/Hand.jsx';
 import Controls from './components/Controls.jsx';
 import WinOverlay from './components/WinOverlay.jsx';
+import StartScreen from './components/StartScreen.jsx';
+import InfoModal from './components/InfoModal.jsx';
 
 export default function App() {
+  const [started, setStarted] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
+
   const {
     groups,
     handTiles,
@@ -22,6 +28,20 @@ export default function App() {
     onToggleHint,
     newPuzzle,
   } = useGameState();
+
+  const handleStart = (diff) => {
+    newPuzzle(diff);
+    setStarted(true);
+  };
+
+  if (!started) {
+    return (
+      <>
+        <StartScreen onStart={handleStart} onInfo={() => setShowInfo(true)} />
+        <InfoModal show={showInfo} onClose={() => setShowInfo(false)} />
+      </>
+    );
+  }
 
   return (
     <div style={{
@@ -87,6 +107,7 @@ export default function App() {
         onNewPuzzle={newPuzzle}
       />
 
+      <InfoModal show={showInfo} onClose={() => setShowInfo(false)} />
       <WinOverlay solved={solved} onNewPuzzle={newPuzzle} />
     </div>
   );

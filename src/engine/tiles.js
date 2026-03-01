@@ -10,3 +10,12 @@ export const TILE_MAX = 13;
 export function makeTile(color, number) {
   return { id: `${COLOR_NAMES[color]}-${number}`, color, number };
 }
+
+/** Joker counter — reset at the start of each puzzle generation. */
+let _jokerSeq = 0;
+export function resetJokerSeq() { _jokerSeq = 0; }
+
+/** Returns a wildcard joker tile. */
+export function makeJoker() {
+  return { id: `joker-${_jokerSeq++}`, isJoker: true, color: -1, number: -1 };
+}
